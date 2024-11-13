@@ -1,3 +1,5 @@
+const socket = io();
+
 let playerId = null;
 let opponentId = null;
 let playerHealth = 100;

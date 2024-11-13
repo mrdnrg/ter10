@@ -7,6 +7,7 @@ let enemyHealth = 100;
 let playerBlock = null;
 let playerAttack = null;
 let isReady = false;
+let actionSubmitted = false;
 
 const damageValues = {
     head: 30,
@@ -57,8 +58,10 @@ socket.on('updatePlayers', (players) => {
 // Обработка начала игры
 socket.on('startGame', () => {
     isReady = true;
+    actionSubmitted = false; // Добавлено
     document.getElementById('fightButton').textContent = 'Атаковать!';
 });
+
 
 // Обработка результатов раунда
 socket.on('roundResult', (data) => {
@@ -112,6 +115,10 @@ socket.on('roundResult', (data) => {
         // Игра окончена
         isReady = false;
         document.getElementById('fightButton').textContent = 'Готов!';
+    } else {
+        // Игра продолжается
+        document.getElementById('fightButton').textContent = 'Атаковать!';
+        actionSubmitted = false;
     }
 
     // Сброс выбора
@@ -163,6 +170,11 @@ document.getElementById('fightButton').addEventListener('click', function() {
             return;
         }
 
+        if (actionSubmitted) {
+            alert('Вы уже сделали свой ход. Ожидайте противника.');
+            return;
+        }
+
         // Отправляем данные о ходе на сервер
         socket.emit('playerAction', {
             attack: playerAttack,
@@ -170,6 +182,7 @@ document.getElementById('fightButton').addEventListener('click', function() {
         });
 
         document.getElementById('fightButton').textContent = 'Ожидание хода противника...';
+        actionSubmitted = true;
     }
 });
 
@@ -196,6 +209,7 @@ function resetGame() {
     playerBlock = null;
     playerAttack = null;
     isReady = false;
+    actionSubmitted = false;
     document.getElementById('fightButton').textContent = 'Готов!';
     document.querySelectorAll('.part').forEach(p => p.style.background = '');
 }
