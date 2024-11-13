@@ -70,17 +70,17 @@ function updateCharactersList() {
     });
 }
 
-// Обработка успешного выбора персонажа
 socket.on('characterSelected', (character) => {
     // Скрываем выбор персонажей
     document.getElementById('characterSelection').style.display = 'none';
     // Отображаем игровую область
     document.getElementById('gameArea').style.display = 'block';
     // Отображаем контент игры
-    document.getElementById('gameContent').style.display = 'block';
+    document.getElementById('gameContent').style.display = 'block'; // Исправлено на 'block'
     // Устанавливаем изображение персонажа
     document.getElementById('playerCharacterImage').src = `images/${character.image}`;
 });
+
 
 // Обработка ситуации, когда персонаж уже выбран
 socket.on('characterUnavailable', (characterName) => {
@@ -110,10 +110,12 @@ socket.on('equipmentAssigned', (equipment) => {
 socket.on('updatePlayers', (players) => {
     playerId = socket.id;
     opponentId = Object.keys(players).find(id => id !== playerId);
-    if (opponentId) {
+
+    if (opponentId && players[opponentId]) {
         // Если оба игрока выбрали персонажей, скрываем ожидание
         if (players[playerId].character && players[opponentId].character) {
             document.getElementById('waitingArea').style.display = 'none';
+            document.getElementById('gameContent').style.display = 'block';
         } else {
             document.getElementById('waitingArea').style.display = 'block';
             document.getElementById('gameContent').style.display = 'none';
@@ -123,6 +125,19 @@ socket.on('updatePlayers', (players) => {
         document.getElementById('gameContent').style.display = 'none';
     }
 });
+
+// Обработка успешного выбора персонажа
+socket.on('characterSelected', (character) => {
+    // Скрываем выбор персонажей
+    document.getElementById('characterSelection').style.display = 'none';
+    // Отображаем игровую область
+    document.getElementById('gameArea').style.display = 'block';
+    // Отображаем контент игры
+    document.getElementById('gameContent').style.display = 'block'; // Исправлено
+    // Устанавливаем изображение персонажа
+    document.getElementById('playerCharacterImage').src = `images/${character.image}`;
+});
+
 
 // Обработка начала игры
 socket.on('startGame', () => {
