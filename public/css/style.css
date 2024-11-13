@@ -110,3 +110,8 @@ button {
 .character-option p {
     margin-top: 5px;
 }
+/* Добавьте это в конец файла */
+#enemyCharacterImage {
+    width: 150px;
+    height: auto;
+}

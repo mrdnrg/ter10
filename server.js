@@ -81,6 +81,8 @@ io.on('connection', (socket) => {
             if (allPlayersSelected) {
                 // Раздаем случайную экипировку
                 assignRandomEquipment();
+                // Отправляем информацию о персонаже противника
+                sendOpponentInfo();
                 // Начинаем игру
                 io.emit('startGame');
             }
@@ -226,6 +228,19 @@ function assignRandomEquipment() {
         index += numItems;
         // Отправляем информацию игроку
         io.to(id).emit('equipmentAssigned', players[id].equipment);
+    }
+}
+
+// Функция для отправки информации о персонаже противника
+function sendOpponentInfo() {
+    let playerIds = Object.keys(players);
+    if (playerIds.length === 2) {
+        let player1 = players[playerIds[0]];
+        let player2 = players[playerIds[1]];
+
+        // Отправляем каждому игроку информацию о персонаже противника
+        io.to(player1.id).emit('opponentCharacter', player2.character);
+        io.to(player2.id).emit('opponentCharacter', player1.character);
     }
 }
 

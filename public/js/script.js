@@ -76,6 +76,8 @@ socket.on('characterSelected', (character) => {
     document.getElementById('characterSelection').style.display = 'none';
     // Отображаем игровую область
     document.getElementById('gameArea').style.display = 'block';
+    // Отображаем контент игры
+    document.getElementById('gameContent').style.display = 'block';
     // Устанавливаем изображение персонажа
     document.getElementById('playerCharacterImage').src = `images/${character.image}`;
 });
@@ -83,6 +85,11 @@ socket.on('characterSelected', (character) => {
 // Обработка ситуации, когда персонаж уже выбран
 socket.on('characterUnavailable', (characterName) => {
     alert(`Персонаж ${characterName} уже выбран другим игроком. Пожалуйста, выберите другого персонажа.`);
+});
+
+// Обработка получения информации о персонаже противника
+socket.on('opponentCharacter', (character) => {
+    document.getElementById('enemyCharacterImage').src = `images/${character.image}`;
 });
 
 // Обработка получения экипировки
@@ -273,4 +280,6 @@ function resetGame() {
     actionSubmitted = false;
     document.getElementById('fightButton').textContent = 'Готов!';
     document.querySelectorAll('.part').forEach(p => p.style.background = '');
+    // Сбрасываем изображение противника
+    document.getElementById('enemyCharacterImage').src = '';
 }
