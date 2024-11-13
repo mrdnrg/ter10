@@ -1,0 +1,19 @@
+{
+  "name": "onlinefightgame",
+  "version": "1.0.0",
+  "description": "Онлайн Бойцовская Игра",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
