@@ -1,3 +1,5 @@
+// script.js
+
 const socket = io();
 
 let playerId = null;
@@ -42,13 +44,73 @@ const defensePhrases = {
     ]
 };
 
+let availableCharacters = [];
+
+// Получение списка доступных персонажей от сервера
+socket.on('updateAvailableCharacters', (characters) => {
+    availableCharacters = characters;
+    updateCharactersList();
+});
+
+// Функция для обновления списка персонажей
+function updateCharactersList() {
+    const charactersListDiv = document.getElementById('charactersList');
+    charactersListDiv.innerHTML = '';
+    availableCharacters.forEach(character => {
+        const characterDiv = document.createElement('div');
+        characterDiv.classList.add('character-option');
+        characterDiv.innerHTML = `
+            <img src="images/${character.image}" alt="${character.name}">
+            <p>${character.name}</p>
+        `;
+        characterDiv.addEventListener('click', () => {
+            socket.emit('selectCharacter', character.name);
+        });
+        charactersListDiv.appendChild(characterDiv);
+    });
+}
+
+// Обработка успешного выбора персонажа
+socket.on('characterSelected', (character) => {
+    // Скрываем выбор персонажей
+    document.getElementById('characterSelection').style.display = 'none';
+    // Отображаем игровую область
+    document.getElementById('gameArea').style.display = 'block';
+    // Устанавливаем изображение персонажа
+    document.getElementById('playerCharacterImage').src = `images/${character.image}`;
+});
+
+// Обработка ситуации, когда персонаж уже выбран
+socket.on('characterUnavailable', (characterName) => {
+    alert(`Персонаж ${characterName} уже выбран другим игроком. Пожалуйста, выберите другого персонажа.`);
+});
+
+// Обработка получения экипировки
+socket.on('equipmentAssigned', (equipment) => {
+    // Очищаем текущие слоты
+    const equipmentSlots = document.querySelector('#playerCharacter .equipment-slots');
+    equipmentSlots.innerHTML = '';
+    // Отображаем новую экипировку
+    equipment.forEach(item => {
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('slot');
+        slotDiv.innerHTML = `<img src="images/${item}" alt="Экипировка">`;
+        equipmentSlots.appendChild(slotDiv);
+    });
+});
+
 // Обработка обновления списка игроков
 socket.on('updatePlayers', (players) => {
     playerId = socket.id;
     opponentId = Object.keys(players).find(id => id !== playerId);
     if (opponentId) {
-        document.getElementById('waitingArea').style.display = 'none';
-        document.getElementById('gameContent').style.display = 'block';
+        // Если оба игрока выбрали персонажей, скрываем ожидание
+        if (players[playerId].character && players[opponentId].character) {
+            document.getElementById('waitingArea').style.display = 'none';
+        } else {
+            document.getElementById('waitingArea').style.display = 'block';
+            document.getElementById('gameContent').style.display = 'none';
+        }
     } else {
         document.getElementById('waitingArea').style.display = 'block';
         document.getElementById('gameContent').style.display = 'none';
@@ -58,10 +120,9 @@ socket.on('updatePlayers', (players) => {
 // Обработка начала игры
 socket.on('startGame', () => {
     isReady = true;
-    actionSubmitted = false; // Добавлено
+    actionSubmitted = false; // Сброс
     document.getElementById('fightButton').textContent = 'Атаковать!';
 });
-
 
 // Обработка результатов раунда
 socket.on('roundResult', (data) => {

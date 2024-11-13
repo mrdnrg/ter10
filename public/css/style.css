@@ -34,18 +34,14 @@ h1 {
 }
 
 .equipment-slots {
-    position: absolute;
-    top: 0;
-    left: -60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-top: 10px;
 }
 
 .slot {
     width: 50px;
     height: 50px;
-    margin: 5px 0;
+    margin: 5px;
+    display: inline-block;
 }
 
 .slot img {
@@ -93,4 +89,24 @@ button {
 
 #waitingArea {
     margin-top: 50px;
+}
+
+#characterSelection {
+    margin-top: 20px;
+}
+
+.character-option {
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.character-option img {
+    width: 100px;
+    height: auto;
+}
+
+.character-option p {
+    margin-top: 5px;
 }

@@ -8,9 +8,19 @@
 <body>
 
     <h1>Онлайн Бойцовская Игра</h1>
-    <div id="gameArea">
+
+    <!-- Раздел выбора персонажа -->
+    <div id="characterSelection">
+        <h2>Выберите персонажа:</h2>
+        <div id="charactersList">
+            <!-- Список персонажей будет заполнен динамически -->
+        </div>
+    </div>
+
+    <!-- Игровая область -->
+    <div id="gameArea" style="display: none;">
         <div id="waitingArea">
-            <p>Ожидание подключения другого игрока...</p>
+            <p>Ожидание подключения другого игрока или выбора персонажа...</p>
         </div>
         <div id="gameContent" style="display: none;">
             <div class="health-bar">
@@ -22,13 +32,9 @@
                 <!-- Ваш персонаж -->
                 <div class="character" id="playerCharacter">
                     <h2>Ваш персонаж</h2>
-                    <img src="images/player.png" alt="Ваш персонаж" class="character-image">
+                    <img id="playerCharacterImage" src="" alt="Ваш персонаж" class="character-image">
                     <div class="equipment-slots">
-                        <!-- Слоты для экипировки -->
-                        <div class="slot" id="playerHeadSlot"><img src="images/helmet.png" alt="Шлем"></div>
-                        <div class="slot" id="playerChestSlot"><img src="images/armor.png" alt="Броня"></div>
-                        <div class="slot" id="playerWeaponSlot"><img src="images/sword.png" alt="Меч"></div>
-                        <div class="slot" id="playerLegsSlot"><img src="images/boots.png" alt="Сапоги"></div>
+                        <!-- Экипировка будет отображаться здесь -->
                     </div>
                     <div class="body-parts" id="playerBlocks">
                         <h3>Поставить блок</h3>
@@ -43,13 +49,6 @@
                 <div class="character" id="enemyCharacter">
                     <h2>Противник</h2>
                     <img src="images/enemy.png" alt="Противник" class="character-image">
-                    <div class="equipment-slots">
-                        <!-- Слоты для экипировки -->
-                        <div class="slot" id="enemyHeadSlot"><img src="images/enemy_helmet.png" alt="Шлем"></div>
-                        <div class="slot" id="enemyChestSlot"><img src="images/enemy_armor.png" alt="Броня"></div>
-                        <div class="slot" id="enemyWeaponSlot"><img src="images/enemy_sword.png" alt="Меч"></div>
-                        <div class="slot" id="enemyLegsSlot"><img src="images/enemy_boots.png" alt="Сапоги"></div>
-                    </div>
                     <div class="body-parts" id="playerAttacks">
                         <h3>Атаковать</h3>
                         <div class="part" data-part="head">Голова</div>
